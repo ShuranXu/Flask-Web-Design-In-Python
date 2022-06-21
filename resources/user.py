@@ -3,13 +3,12 @@ from hmac import compare_digest
 from flask_jwt_extended import (
     create_access_token,
     create_refresh_token,
-    jwt_refresh_token_required,
     get_jwt_identity,
-    get_raw_jwt,
+    get_jwt,
     jwt_required
 )
 from models.user import UserModel
-from blacklist import BLACKLIST
+from blocklist import BLACKLIST
 
 _user_parser = reqparse.RequestParser()
 _user_parser.add_argument('username',
@@ -55,9 +54,9 @@ class UserLogin(Resource):
 
 
 class UserLogout(Resource):
-    @jwt_required
+    @jwt_required()
     def post(self):
-        jti = get_raw_jwt()['jti']
+        jti = get_jwt()['jti']
         BLACKLIST.add(jti)
         return {"message": "Successfully logged out"}, 200
 
@@ -84,7 +83,7 @@ class User(Resource):
 
 
 class TokenRefresh(Resource):
-    @jwt_refresh_token_required
+    @jwt_required(refresh=True)
     def post(self):
         current_user = get_jwt_identity()
         new_token = create_access_token(identity=current_user, fresh=False)
