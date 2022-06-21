@@ -38,14 +38,13 @@ def add_claims_to_jwt(identity):
 
 # This method will check if a token is blacklisted, and will be called automatically when blacklist is enabled
 @jwt.token_in_blocklist_loader
-def check_if_token_in_blacklist(decrypted_token):
-    return decrypted_token['jti'] in BLACKLIST
-
+def check_if_token_in_blocklist(jwt_header, jwt_payload):
+    return jwt_payload['jti'] in BLACKLIST
 
 # The following callbacks are used for customizing jwt response/error messages.
 # The original ones may not be in a very pretty format (opinionated)
 @jwt.expired_token_loader
-def expired_token_callback():
+def expired_token_callback(jwt_header, jwt_payload):
     return jsonify({
         'message': 'The token has expired.',
         'error': 'token_expired'
@@ -77,7 +76,7 @@ def token_not_fresh_callback():
 
 
 @jwt.revoked_token_loader
-def revoked_token_callback():
+def revoked_token_callback(jwt_header, jwt_payload):
     return jsonify({
         "description": "The token has been revoked.",
         'error': 'token_revoked'
