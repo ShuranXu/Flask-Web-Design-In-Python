@@ -3,6 +3,7 @@
 This section presents the basic usage of an active flask JWT extension called `flask-jwt-extended`. We inherited and simplified the project structure from section 6 to demonstrate how to apply `flask-jwt-extended` to our project. 
 
 ## Features
+
  - JWT authentication
  - Token refreshing
  - Fresh token vs. Non-fresh token
@@ -93,9 +94,6 @@ Introduce `@jwt_optional` decorator, which makes the endpoint accessible with an
 ### Token Refresh
 
 Introduce another endpoint, `/refresh`, for token refreshing. Add a refresh token in the previous `/login` endpoint response, and show how to get a new access token using the refresh token, without entering user credentials.
-
-tips:
-- don't worry about token freshness for now (non-fresh by default)
 
 ### Token freshness
 
